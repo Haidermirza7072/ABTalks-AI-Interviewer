@@ -1,0 +1,24 @@
+# Local env / secrets
+.env
+.env.*
+!.env.example
+
+# Agent tooling (not part of app)
+.agents
+skills-lock.json
+
+# Assets are reference docs, not shipped in image
+assets
+
+# Logs & runtime artifacts
+interview_logs
+**/__pycache__
+**/*.pyc
+**/*.pyo
+.git
+.gitignore
+
+# Docker internals
+Dockerfile
+docker-compose.yml
+.dockerignore

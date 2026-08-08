@@ -1,5 +1,7 @@
 # This file contains all the Prompts
 
+## Common prompts (Used before coding implementation)
+
 ### Prompt 1
 Act as an expert Innovation Strategist and generate a comprehensive brainstorming output for the problem I provide. Begin by deconstructing the problem: restate it in your own words, list all explicit constraints, and challenge underlying assumptions by offering 3 radically reframed "How Might We" statements. Next, diverge wildly: generate 8 distinct ideas across different categories, draw analogies from nature and unrelated industries, and list 5 intentionally terrible ideas to unlock creativity. Then, converge: cluster the ideas into 3–4 major themes, hybridize two contradictory concepts into a "Super Idea," and identify the Top 3 "Low Effort, High Impact" quick wins alongside the Top 2 "High Effort, High Impact" moonshots using an Impact vs. Effort framework. Finally, for each of those Top 5 ideas, provide a catchy title, a one-sentence pitch, a step-by-step mechanism, the single biggest risk with mitigation, and a specific 48-hour experiment with a clear success metric. Structure the entire response with clear headers, bullet points, and a concluding summary recommending the most promising path forward.
 
@@ -16,3 +18,17 @@ For the Back‑End Developer (Member 2): Write a detailed prompt that extracts a
 For the AI Agent Developer (Member 3): Write a detailed prompt that extracts all machine learning, NLP, recommendation, or automation requirements from the PRD. It must specify the core AI capability (e.g., classification, generation, prediction, decision‑making), training data sources and labeling requirements, model selection criteria, evaluation metrics (accuracy, F1, BLEU, etc.), inference pipeline (pre‑processing, inference, post‑processing), fallback mechanisms for low‑confidence outputs, and continuous improvement loops (feedback collection, retraining schedule). The prompt should instruct the developer to define the agent's input/output schema, produce a proof‑of‑concept plan, and outline a testing strategy for edge cases and bias mitigation.
 
 For each of these three prompts, ensure they are atomic (can be run independently), sequential (front‑end prompt assumes the API spec from back‑end is available, back‑end prompt assumes AI agent outputs are defined, and AI prompt references the data models from back‑end), and actionable (each includes specific deliverables, success criteria, and a timeline estimate). Finally, provide a coordination matrix that maps dependencies between the three streams, highlighting what each member must share with the others and at what stage, to ensure seamless integration.
+
+### Prompt 4
+Create a design.md for this.
+
+## Member 3 - Vishal Mondal
+
+### Prompt 1
+Read @assets/Member 3.md and create Feature by Feature Implementation Plan.
+
+### Prompt 2
+Implement docker in it. I will use docker to run the application. 
+
+### Prompt 3
+So it is only asking question, but i dont answer. I want to enter answer and get feedback on it

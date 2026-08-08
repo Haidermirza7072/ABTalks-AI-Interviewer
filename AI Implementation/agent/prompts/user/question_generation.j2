@@ -1,0 +1,34 @@
+Task: Generate the NEXT interview question.
+
+## Candidate profile
+- candidate_id: {{ profile.candidate_id }}
+- completed days: {{ profile.completed_days | join(", ") }}
+- skipped topics/days: {{ profile.skipped_topics | join(", ") }}
+- tools used: {{ profile.tools_used | join(", ") }}
+
+## Curriculum context (candidate's uncovered days, for reference only)
+{{ curriculum_context }}
+
+## Conversation so far
+{% for turn in history %}{{ turn.role | upper }}: {{ turn.content }}
+{% endfor %}
+## Recent question types (do not repeat the last 2)
+{{ recent_question_types | join(", ") }}
+
+## Allowed question taxonomy
+{{ taxonomy_text }}
+
+## Instruction
+- Pick ONE day from the uncovered days (prefer a completed-but-uncovered day).
+- Ask ONE natural, probing question grounded in that day's learning objectives.
+- Do NOT ask about a skipped topic in a "gotcha" way — ask a high-level
+  conceptual question instead.
+- Do NOT invent technical facts not present in the curriculum context.
+
+You must output valid JSON matching EXACTLY this schema:
+{
+  "question": "...",
+  "target_day": "day_XX",
+  "question_type": "challenge|expand|compare|apply|teach|meta",
+  "persona": "hiring_manager|senior_engineer|staff_engineer"
+}
