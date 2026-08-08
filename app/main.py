@@ -12,7 +12,7 @@ from fastapi.responses import JSONResponse
 
 from app.config import settings
 from app.middleware.rate_limiter import RateLimiterMiddleware
-from app.routers import admin, health, interview
+from app.routers import admin, health, interview, tts
 from app.services.data_loader import init_data_stores
 from app.services.llm_client import check_llm_health
 from app.services.session_manager import cleanup_expired_sessions, reload_sessions_from_disk_on_startup
@@ -93,6 +93,7 @@ app.add_middleware(RateLimiterMiddleware, max_requests=settings.RATE_LIMIT_PER_M
 app.include_router(health.router)
 app.include_router(interview.router)
 app.include_router(admin.router)
+app.include_router(tts.router)
 
 # Exception Handlers
 @app.exception_handler(RequestValidationError)

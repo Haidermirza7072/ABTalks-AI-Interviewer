@@ -18,6 +18,7 @@ class CandidateProfile(BaseModel):
 # Entity 2: CurriculumDay
 class CurriculumDay(BaseModel):
     day_id: str
+    module: Optional[str] = None
     title: str
     topics: List[str] = Field(default_factory=list)
     learning_objectives: List[str] = Field(default_factory=list)
