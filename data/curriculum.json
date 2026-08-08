@@ -1,8 +1,9 @@
 [
   {
     "day_id": "day_1",
+    "module": "Module 1: Python & API Foundations",
     "title": "System Architecture & API Design",
-    "topics": ["RESTful APIs", "FastAPI Core", "Microservices Architecture"],
+    "topics": ["RESTful APIs", "FastAPI Core", "HTTP Status Codes", "Microservices Overview"],
     "learning_objectives": [
       "Understand REST principles and HTTP status codes",
       "Design clean and maintainable API routing structure",
@@ -13,6 +14,59 @@
   },
   {
     "day_id": "day_2",
+    "module": "Module 1: Python & API Foundations",
+    "title": "Python Fundamentals for AI",
+    "topics": ["Data Structures", "List & Dict Comprehensions", "Generators", "Decorators"],
+    "learning_objectives": [
+      "Use core Python data structures efficiently",
+      "Write composable generator pipelines",
+      "Apply decorators for cross-cutting concerns"
+    ],
+    "tools": ["Python 3.11", "Jupyter", "pyenv", "mypy"],
+    "prerequisites": ["Python basics"]
+  },
+  {
+    "day_id": "day_3",
+    "module": "Module 1: Python & API Foundations",
+    "title": "Object-Oriented & Async Python",
+    "topics": ["Classes", "Dataclasses", "asyncio", "async/await", "Concurrent Tasks"],
+    "learning_objectives": [
+      "Model domain entities with dataclasses",
+      "Write non-blocking async code",
+      "Coordinate concurrent tasks safely"
+    ],
+    "tools": ["asyncio", "aiohttp", "uvloop"],
+    "prerequisites": ["day_2"]
+  },
+  {
+    "day_id": "day_4",
+    "module": "Module 1: Python & API Foundations",
+    "title": "FastAPI Routing & Pydantic Validation",
+    "topics": ["Path & Query Params", "Request Bodies", "Dependency Injection", "Error Handling"],
+    "learning_objectives": [
+      "Define typed API routes with dependencies",
+      "Validate inputs with Pydantic schemas",
+      "Implement consistent error responses"
+    ],
+    "tools": ["FastAPI", "Pydantic v2", "pytest", "Uvicorn"],
+    "prerequisites": ["day_1", "day_2"]
+  },
+  {
+    "day_id": "day_5",
+    "module": "Module 1: Python & API Foundations",
+    "title": "Testing & Debugging",
+    "topics": ["Unit Tests", "Fixtures", "Mocking", "Code Coverage"],
+    "learning_objectives": [
+      "Write reliable unit and async tests",
+      "Mock external services",
+      "Measure and improve test coverage"
+    ],
+    "tools": ["pytest", "pytest-asyncio", "coverage.py", "httpx"],
+    "prerequisites": ["day_4"]
+  },
+  {
+    "day_id": "day_6",
+    "module": "Module 2: Backend Engineering & Persistence",
     "title": "State Management & Persistence",
     "topics": ["In-memory Caching", "Redis Integration", "Filesystem Backup"],
     "learning_objectives": [
@@ -21,18 +75,331 @@
       "Handle background cleanup and session expiration"
     ],
     "tools": ["Redis", "aiofiles", "asyncio"],
-    "prerequisites": ["day_1", "Async Python"]
+    "prerequisites": ["day_4", "day_3"]
   },
   {
-    "day_id": "day_3",
+    "day_id": "day_7",
+    "module": "Module 2: Backend Engineering & Persistence",
+    "title": "Multi-Layer Session Stores",
+    "topics": ["RAM -> Redis -> Disk", "TTL Management", "Session Expiry", "Recovery"],
+    "learning_objectives": [
+      "Implement layered session persistence",
+      "Manage TTLs and background cleanup",
+      "Recover sessions after process restart"
+    ],
+    "tools": ["Redis", "diskcache", "Pydantic"],
+    "prerequisites": ["day_6"]
+  },
+  {
+    "day_id": "day_8",
+    "module": "Module 2: Backend Engineering & Persistence",
+    "title": "Microservices Architecture",
+    "topics": ["Service Boundaries", "Sync vs Async Communication", "Message Queues", "Resilience Patterns"],
+    "learning_objectives": [
+      "Decompose a system into bounded services",
+      "Choose between synchronous and asynchronous communication",
+      "Apply retry, backoff, and circuit-breaker patterns"
+    ],
+    "tools": ["RabbitMQ", "Docker", "FastAPI"],
+    "prerequisites": ["day_1", "day_6"]
+  },
+  {
+    "day_id": "day_9",
+    "module": "Module 2: Backend Engineering & Persistence",
+    "title": "SQL & NoSQL Databases",
+    "topics": ["Relational Modeling", "SQLAlchemy ORM", "Key-Value Stores", "Indexing"],
+    "learning_objectives": [
+      "Model relational data with integrity constraints",
+      "Interact with databases through an ORM",
+      "Compare SQL and NoSQL tradeoffs"
+    ],
+    "tools": ["SQLite", "SQLAlchemy", "Redis"],
+    "prerequisites": ["day_6"]
+  },
+  {
+    "day_id": "day_10",
+    "module": "Module 2: Backend Engineering & Persistence",
+    "title": "REST Security & Middleware",
+    "topics": ["API Keys", "CORS", "Rate Limiting", "Middleware & Logging"],
+    "learning_objectives": [
+      "Protect APIs with keys and rate limits",
+      "Configure CORS safely",
+      "Centralize logging and request tracing"
+    ],
+    "tools": ["fastapi-limiter", "structlog", "Uvicorn"],
+    "prerequisites": ["day_4"]
+  },
+  {
+    "day_id": "day_11",
+    "module": "Module 3: LLM Engineering & Voice AI",
+    "title": "LLM Fundamentals",
+    "topics": ["Transformers", "Attention Mechanism", "Tokenization", "Context Windows"],
+    "learning_objectives": [
+      "Explain how transformer models work",
+      "Understand tokens and context limits",
+      "Choose the right model by capability"
+    ],
+    "tools": ["Hugging Face", "transformers", "tiktoken"],
+    "prerequisites": ["day_2"]
+  },
+  {
+    "day_id": "day_12",
+    "module": "Module 3: LLM Engineering & Voice AI",
     "title": "LLM Integration & Resilience",
-    "topics": ["OpenRouter API", "Prompt Engineering", "Fallback Mechanisms", "RAG"],
+    "topics": ["OpenRouter API", "Async Calls", "Timeouts", "Retries", "Fallbacks"],
     "learning_objectives": [
       "Connect FastAPI services to external LLM providers asynchronously",
       "Enforce execution timeouts and retry strategies",
       "Implement offline fallback question engine and vector stores"
     ],
-    "tools": ["httpx", "OpenRouter", "ChromaDB", "LangChain"],
-    "prerequisites": ["day_1", "day_2"]
+    "tools": ["httpx", "OpenRouter", "asyncio"],
+    "prerequisites": ["day_11"]
+  },
+  {
+    "day_id": "day_13",
+    "module": "Module 3: LLM Engineering & Voice AI",
+    "title": "Prompt Engineering",
+    "topics": ["System Prompts", "Few-Shot Learning", "Chain-of-Thought", "Constrained Output"],
+    "learning_objectives": [
+      "Design effective system prompts for personas",
+      "Use few-shot examples to steer answers",
+      "Structure chain-of-thought reasoning"
+    ],
+    "tools": ["LangChain", "OpenAI-compatible APIs"],
+    "prerequisites": ["day_12"]
+  },
+  {
+    "day_id": "day_14",
+    "module": "Module 3: LLM Engineering & Voice AI",
+    "title": "Structured Output & Guardrails",
+    "topics": ["JSON Mode", "Schema Validation", "Hallucination Checks", "Guardrails"],
+    "learning_objectives": [
+      "Force structured JSON outputs from the LLM",
+      "Validate LLM output against Pydantic schemas",
+      "Detect and prevent hallucinated claims"
+    ],
+    "tools": ["Pydantic", "instructor", "OpenRouter"],
+    "prerequisites": ["day_13"]
+  },
+  {
+    "day_id": "day_15",
+    "module": "Module 3: LLM Engineering & Voice AI",
+    "title": "Fallback & Resilience Design",
+    "topics": ["Cached Question Banks", "Offline Engines", "Graceful Degradation", "Circuit Breakers"],
+    "learning_objectives": [
+      "Build deterministic fallback question banks",
+      "Degrade gracefully when the LLM fails",
+      "Test failure and timeout scenarios"
+    ],
+    "tools": ["JSON banks", "ChromaDB", "pytest"],
+    "prerequisites": ["day_12"]
+  },
+  {
+    "day_id": "day_16",
+    "module": "Module 3: LLM Engineering & Voice AI",
+    "title": "LLM Evaluation & Metrics",
+    "topics": ["Question Relevance", "Hallucination Rate", "Scoring Rubrics", "A/B Testing"],
+    "learning_objectives": [
+      "Measure relevance of generated questions",
+      "Compute hallucination rate on transcripts",
+      "Build rubric-based readiness scoring"
+    ],
+    "tools": ["ragas", "numpy", "pytest", "LangSmith"],
+    "prerequisites": ["day_14"]
+  },
+  {
+    "day_id": "day_17",
+    "module": "Module 3: LLM Engineering & Voice AI",
+    "title": "Voice AI & Speech Interfaces",
+    "topics": ["Text-to-Speech", "Speech-to-Text", "edge-tts", "Web Speech API", "Streaming Audio"],
+    "learning_objectives": [
+      "Generate natural neural speech with edge-tts",
+      "Transcribe spoken answers with the Web Speech API",
+      "Stream audio into web interfaces"
+    ],
+    "tools": ["edge-tts", "Web Speech API", "HTML5 Audio"],
+    "prerequisites": ["day_12"]
+  },
+  {
+    "day_id": "day_18",
+    "module": "Module 3: LLM Engineering & Voice AI",
+    "title": "Multi-Turn Conversation & Memory",
+    "topics": ["Conversation State", "Context Trimming", "Persona Switching", "Memory"],
+    "learning_objectives": [
+      "Persist multi-turn conversation state",
+      "Trim context to fit token windows",
+      "Switch interviewer personas across turns"
+    ],
+    "tools": ["LangChain memory", "Redis", "Pydantic"],
+    "prerequisites": ["day_14", "day_7"]
+  },
+  {
+    "day_id": "day_19",
+    "module": "Module 4: RAG & Knowledge Systems",
+    "title": "RAG Architecture",
+    "topics": ["Indexing", "Retrieval", "Generation", "RAG Pipeline"],
+    "learning_objectives": [
+      "Explain the retrieval-augmented generation pipeline",
+      "Choose what to index for grounding",
+      "Implement retrieval-augmented generation"
+    ],
+    "tools": ["ChromaDB", "LangChain", "FastAPI"],
+    "prerequisites": ["day_11"]
+  },
+  {
+    "day_id": "day_20",
+    "module": "Module 4: RAG & Knowledge Systems",
+    "title": "Embeddings & Vector Stores",
+    "topics": ["Embedding Models", "Cosine Similarity", "HNSW Indexing", "Vector Search"],
+    "learning_objectives": [
+      "Generate embeddings for text chunks",
+      "Implement similarity search",
+      "Configure vector index parameters"
+    ],
+    "tools": ["ChromaDB", "sentence-transformers", "numpy"],
+    "prerequisites": ["day_19"]
+  },
+  {
+    "day_id": "day_21",
+    "module": "Module 4: RAG & Knowledge Systems",
+    "title": "Chunking & Retrieval Quality",
+    "topics": ["Chunking Strategies", "Chunk Overlap", "Metadata Filters", "Reranking"],
+    "learning_objectives": [
+      "Split documents into meaningful chunks",
+      "Use metadata filters to narrow retrieval",
+      "Improve retrieval precision with reranking"
+    ],
+    "tools": ["LangChain text splitters", "ChromaDB"],
+    "prerequisites": ["day_19"]
+  },
+  {
+    "day_id": "day_22",
+    "module": "Module 4: RAG & Knowledge Systems",
+    "title": "Knowledge Grounding & Fact-Checking",
+    "topics": ["Grounding", "Citations", "Fact Verification", "Hallucination Control"],
+    "learning_objectives": [
+      "Ground generated answers in source material",
+      "Attach evidence citations to claims",
+      "Verify technical claims against the knowledge base"
+    ],
+    "tools": ["ChromaDB", "Pydantic", "pytest"],
+    "prerequisites": ["day_20"]
+  },
+  {
+    "day_id": "day_23",
+    "module": "Module 4: RAG & Knowledge Systems",
+    "title": "Building a Q&A Assistant",
+    "topics": ["Full RAG Pipeline", "Streaming Answers", "UX Design", "Edge Cases"],
+    "learning_objectives": [
+      "Build an end-to-end RAG assistant",
+      "Stream responses to the UI",
+      "Handle edge cases and empty retrievals"
+    ],
+    "tools": ["LangChain", "FastAPI", "ChromaDB"],
+    "prerequisites": ["day_21"]
+  },
+  {
+    "day_id": "day_24",
+    "module": "Module 4: RAG & Knowledge Systems",
+    "title": "Semantic & Hybrid Search",
+    "topics": ["Keyword Search", "BM25", "Hybrid Retrieval", "Result Ranking"],
+    "learning_objectives": [
+      "Combine keyword and vector retrieval",
+      "Implement BM25 scoring",
+      "Rank results for relevance"
+    ],
+    "tools": ["ChromaDB", "RankBm25", "numpy"],
+    "prerequisites": ["day_22"]
+  },
+  {
+    "day_id": "day_25",
+    "module": "Module 5: Production, MLOps & Capstone",
+    "title": "Docker & Containerization",
+    "topics": ["Dockerfiles", "Images", "docker-compose", "Multi-Stage Builds"],
+    "learning_objectives": [
+      "Containerize a FastAPI application",
+      "Orchestrate multi-service stacks with Compose",
+      "Optimize image size and build times"
+    ],
+    "tools": ["Docker", "docker-compose"],
+    "prerequisites": ["day_8"]
+  },
+  {
+    "day_id": "day_26",
+    "module": "Module 5: Production, MLOps & Capstone",
+    "title": "Deployment & CI/CD",
+    "topics": ["Cloud Deploy", "GitHub Actions", "Env Management", "Secrets Handling"],
+    "learning_objectives": [
+      "Deploy a service to a cloud platform",
+      "Automate builds and tests with CI/CD",
+      "Manage environment variables and secrets safely"
+    ],
+    "tools": ["GitHub Actions", "Render/Railway", "Docker"],
+    "prerequisites": ["day_25"]
+  },
+  {
+    "day_id": "day_27",
+    "module": "Module 5: Production, MLOps & Capstone",
+    "title": "Performance & Scaling",
+    "topics": ["Profiling", "Async Bottlenecks", "Caching Strategy", "Load Testing"],
+    "learning_objectives": [
+      "Profile and fix backend bottlenecks",
+      "Apply effective caching strategies",
+      "Run and interpret load tests"
+    ],
+    "tools": ["cProfile", "Redis", "locust"],
+    "prerequisites": ["day_25"]
+  },
+  {
+    "day_id": "day_28",
+    "module": "Module 5: Production, MLOps & Capstone",
+    "title": "Monitoring & Observability",
+    "topics": ["Logs", "Metrics", "Traces", "Health Endpoints", "Alerting"],
+    "learning_objectives": [
+      "Instrument services with logs and metrics",
+      "Build monitoring dashboards",
+      "Set up alerting on failures"
+    ],
+    "tools": ["Prometheus", "Grafana", "structlog"],
+    "prerequisites": ["day_26"]
+  },
+  {
+    "day_id": "day_29",
+    "module": "Module 5: Production, MLOps & Capstone",
+    "title": "Data Quality Gates",
+    "topics": ["Validation Pipelines", "Schema Checks", "Drift Detection"],
+    "learning_objectives": [
+      "Validate data on load at startup",
+      "Prevent malformed data from reaching the app",
+      "Detect data drift over time"
+    ],
+    "tools": ["Pydantic", "pytest", "Great Expectations"],
+    "prerequisites": ["day_26"]
+  },
+  {
+    "day_id": "day_30",
+    "module": "Module 5: Production, MLOps & Capstone",
+    "title": "AI Productization & Responsible AI",
+    "topics": ["Bias", "Safety", "Cost Optimization", "UX of AI"],
+    "learning_objectives": [
+      "Mitigate bias in generated interviews",
+      "Optimize token costs per session",
+      "Design trustworthy AI interfaces"
+    ],
+    "tools": ["Guardrails", "Token budgets", "Prompt logging"],
+    "prerequisites": ["day_18", "day_14"]
+  },
+  {
+    "day_id": "day_31",
+    "module": "Module 5: Production, MLOps & Capstone",
+    "title": "Capstone: The AI Interview Agent",
+    "topics": ["Full-Stack Integration", "Multi-Day Coverage", "Evaluation", "Demo Delivery"],
+    "learning_objectives": [
+      "Integrate every module into a working interview agent",
+      "Ensure each session covers 4+ curriculum days",
+      "Evaluate performance and present the demo"
+    ],
+    "tools": ["FastAPI", "Redis", "ChromaDB", "edge-tts", "Docker"],
+    "prerequisites": ["day_1", "day_7", "day_12", "day_17", "day_24", "day_25"]
   }
 ]

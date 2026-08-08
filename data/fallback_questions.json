@@ -1,17 +1,126 @@
 {
   "day_1": [
     "Welcome! Let's start with system design. How do you approach structuring a FastAPI project for high maintainability and validation using Pydantic?",
-    "That makes sense. Can you explain how you handle input validation errors in FastAPI and ensure client-facing error responses are clean and structured?",
-    "Great. Now, how do you handle CORS and security considerations when exposing public endpoints in a microservices architecture?"
+    "Can you explain how you handle input validation errors in FastAPI and ensure client-facing error responses are clean and structured?"
   ],
   "day_2": [
-    "Let's move into state management. How do you design an in-memory session store while ensuring state isn't lost if the app restarts?",
-    "Good point. If you were to add Redis into the mix, how would your read/write state resolution hierarchy (RAM -> Redis -> Disk) work under load?",
-    "How do you handle background cleanup of expired sessions to prevent memory leaks in a long-running service?"
+    "Walk me through the core Python data structures you reach for most in backend work, and when each one is the right choice.",
+    "How would you use a generator pipeline to process a large file line by line without loading it all into memory?"
   ],
   "day_3": [
-    "Now let's discuss LLM integration. How do you implement robust fallback mechanisms when external LLM APIs experience latency or 5xx errors?",
-    "When injecting RAG context from a vector database like ChromaDB, how do you manage prompt context windows and token constraints?",
-    "Finally, how do you design synthesis logic to compile multi-turn interview evidence into structured JSON evaluation reports?"
+    "What is the difference between synchronous and asynchronous code in Python, and how does asyncio allow concurrent tasks?",
+    "Why are dataclasses useful for modeling domain entities, and how do they compare to plain dictionaries?"
+  ],
+  "day_4": [
+    "How do you structure route dependencies and request validation in FastAPI to keep endpoint handlers clean?",
+    "What happens when Pydantic validation fails in a request body, and how would you customize the error response format?"
+  ],
+  "day_5": [
+    "How do you write reliable async tests with pytest, and how do you mock external HTTP calls?",
+    "Explain how fixtures and coverage metrics help you keep a test suite healthy."
+  ],
+  "day_6": [
+    "How do you design an in-memory session store while ensuring state isn't lost if the app restarts?",
+    "If you were to add Redis into the mix, how would your read/write state resolution hierarchy (RAM -> Redis -> Disk) work under load?"
+  ],
+  "day_7": [
+    "How would you implement TTL-based expiry and background cleanup for stored sessions?",
+    "Describe how you would recover an active interview session after a process restart using layered persistence."
+  ],
+  "day_8": [
+    "How do you decide between synchronous and asynchronous communication between microservices?",
+    "What resilience patterns would you apply so one failing service doesn't cascade into the whole system?"
+  ],
+  "day_9": [
+    "When would you choose a relational database over a key-value store like Redis, and why?",
+    "How do you model one-to-many relationships with SQLAlchemy, and what are indexes used for?"
+  ],
+  "day_10": [
+    "What mechanisms would you use to rate-limit an API and protect it from abuse?",
+    "How do you configure CORS safely and centralize logging across requests?"
+  ],
+  "day_11": [
+    "In your own words, how do transformer models work, and what is the role of attention?",
+    "What are tokens, and why do context windows matter when picking an LLM for your application?"
+  ],
+  "day_12": [
+    "How do you implement robust fallback mechanisms when external LLM APIs experience latency or 5xx errors?",
+    "How would you enforce timeouts and retries when calling an LLM asynchronously from FastAPI?"
+  ],
+  "day_13": [
+    "How do you design a system prompt that keeps an interviewer persona consistent across turns?",
+    "When would you use few-shot examples in a prompt, and what does chain-of-thought reasoning help with?"
+  ],
+  "day_14": [
+    "How do you force an LLM to return structured JSON and then validate it against a Pydantic schema?",
+    "What guardrails would you add to detect and prevent hallucinated technical claims?"
+  ],
+  "day_15": [
+    "How would you build a deterministic fallback question bank and when would it be served?",
+    "Describe how your interview agent degrades gracefully when the LLM times out mid-conversation."
+  ],
+  "day_16": [
+    "What metrics would you use to evaluate whether interview questions are relevant to the curriculum?",
+    "How would you measure the hallucination rate of an LLM on interview transcripts?"
+  ],
+  "day_17": [
+    "How does edge-tts generate natural neural speech, and how would you stream that audio to a browser?",
+    "What are the tradeoffs of using the Web Speech API for transcribing a candidate's spoken answer?"
+  ],
+  "day_18": [
+    "How do you persist multi-turn conversation state and trim it to fit a token window?",
+    "How would you switch the interviewer persona between a hiring manager and a senior engineer across turns?"
+  ],
+  "day_19": [
+    "Walk me through the retrieval-augmented generation pipeline: indexing, retrieval, and generation.",
+    "What kind of content would you index so interview questions stay grounded in the curriculum?"
+  ],
+  "day_20": [
+    "How do embedding models represent text, and how is cosine similarity used to find relevant chunks?",
+    "What is an HNSW index, and how do its parameters affect vector search speed and accuracy?"
+  ],
+  "day_21": [
+    "What chunking strategies would you use to split a long curriculum document for retrieval?",
+    "How can metadata filters and reranking improve retrieval precision?"
+  ],
+  "day_22": [
+    "How do you ground an LLM's answer in source material and attach citations?",
+    "How would you verify that a technical claim in a generated question actually appears in the curriculum?"
+  ],
+  "day_23": [
+    "Describe how you would build an end-to-end RAG Q&A assistant and stream its answers to the UI.",
+    "What edge cases would you handle when retrieval returns no relevant chunks?"
+  ],
+  "day_24": [
+    "Why would you combine keyword search with vector search, and what does BM25 contribute?",
+    "How do you rank hybrid retrieval results to surface the most relevant evidence first?"
+  ],
+  "day_25": [
+    "How would you write a Dockerfile for a FastAPI app, and what is a multi-stage build?",
+    "How do you orchestrate a multi-service stack (API, Redis, ChromaDB) with docker-compose?"
+  ],
+  "day_26": [
+    "How would you set up CI/CD with GitHub Actions to test and deploy this interview agent?",
+    "How do you manage environment variables and secrets across dev and production safely?"
+  ],
+  "day_27": [
+    "How would you profile a slow FastAPI endpoint and find the async bottleneck?",
+    "What caching strategies would you apply to reduce latency under load, and how would you load test them?"
+  ],
+  "day_28": [
+    "What logs, metrics, and traces would you collect to observe an interview service in production?",
+    "How would you set up a health endpoint and alerting when the LLM dependency goes down?"
+  ],
+  "day_29": [
+    "How would you validate curriculum and candidate JSON at startup so bad data never reaches the app?",
+    "What is data drift, and how would you detect it in the curriculum content over time?"
+  ],
+  "day_30": [
+    "How would you mitigate bias in AI-generated interview questions, and what safety guardrails matter most?",
+    "How would you optimize the token cost of a full interview session without hurting question quality?"
+  ],
+  "day_31": [
+    "Describe how you would integrate FastAPI, Redis, ChromaDB, and edge-tts into one complete interview agent.",
+    "How would you ensure every interview session covers at least 4 different curriculum days, and how would you demo it?"
   ]
 }
