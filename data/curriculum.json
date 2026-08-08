@@ -1,0 +1,38 @@
+[
+  {
+    "day_id": "day_1",
+    "title": "System Architecture & API Design",
+    "topics": ["RESTful APIs", "FastAPI Core", "Microservices Architecture"],
+    "learning_objectives": [
+      "Understand REST principles and HTTP status codes",
+      "Design clean and maintainable API routing structure",
+      "Implement request/response schemas with Pydantic"
+    ],
+    "tools": ["FastAPI", "Pydantic", "Uvicorn", "Postman"],
+    "prerequisites": ["Python basics", "HTTP overview"]
+  },
+  {
+    "day_id": "day_2",
+    "title": "State Management & Persistence",
+    "topics": ["In-memory Caching", "Redis Integration", "Filesystem Backup"],
+    "learning_objectives": [
+      "Design thread-safe state stores for multi-turn sessions",
+      "Implement multi-layer state resolution (RAM -> Redis -> Disk)",
+      "Handle background cleanup and session expiration"
+    ],
+    "tools": ["Redis", "aiofiles", "asyncio"],
+    "prerequisites": ["day_1", "Async Python"]
+  },
+  {
+    "day_id": "day_3",
+    "title": "LLM Integration & Resilience",
+    "topics": ["OpenRouter API", "Prompt Engineering", "Fallback Mechanisms", "RAG"],
+    "learning_objectives": [
+      "Connect FastAPI services to external LLM providers asynchronously",
+      "Enforce execution timeouts and retry strategies",
+      "Implement offline fallback question engine and vector stores"
+    ],
+    "tools": ["httpx", "OpenRouter", "ChromaDB", "LangChain"],
+    "prerequisites": ["day_1", "day_2"]
+  }
+]

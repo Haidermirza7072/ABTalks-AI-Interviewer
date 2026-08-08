@@ -1,0 +1,31 @@
+[
+  {
+    "candidate_id": "cand_101",
+    "completed_missions": ["mission_rest_api", "mission_state_cache"],
+    "skipped_topics": [],
+    "attempts": {
+      "mission_rest_api": 1,
+      "mission_state_cache": 2
+    },
+    "tools_used": ["FastAPI", "Pydantic", "Redis"],
+    "learning_signals": {
+      "confidence_score": 0.85,
+      "avg_completion_time_mins": 45,
+      "strongest_area": "Data validation"
+    }
+  },
+  {
+    "candidate_id": "cand_102",
+    "completed_missions": ["mission_rest_api"],
+    "skipped_topics": ["day_2"],
+    "attempts": {
+      "mission_rest_api": 1
+    },
+    "tools_used": ["FastAPI", "ChromaDB"],
+    "learning_signals": {
+      "confidence_score": 0.65,
+      "avg_completion_time_mins": 60,
+      "strongest_area": "Vector search"
+    }
+  }
+]
