@@ -82,20 +82,20 @@ You must implement the following views as distinct routes or modal states:
 
 ### C. USER INTERACTION FLOWS & EVENT HANDLERS
 
-Define and implement the following user-facing events with their handlers:
+  Define and implement the following user-facing events with their handlers:
 
-| Event | Handler | Description |
-|-------|---------|-------------|
-| onStartInterview | handleStartInterview(candidate_id) | POST /interview/start, validate response, route to Chat, store session_id |
-| onSubmitAnswer | handleSubmitAnswer(session_id, answer) | POST /interview/{session_id}/respond, optimistic UI update, show typing indicator, handle 8-turn minimum enforcement (disable End Interview until criteria met) |
-| onReceiveQuestion | handleReceiveQuestion(response) | Append question to chat history, update progress indicators, trigger persona change animation if persona switched |
-| onEndInterview | handleEndInterview(session_id) | POST /interview/{session_id}/feedback, show loading overlay, route to Feedback Report |
-| onAbortInterview | handleAbortInterview(session_id) | Show confirmation modal, POST /interview/{session_id}/abort, route to partial Feedback Report with disclaimer banner |
-| onRetry | handleRetry() | Exponential backoff retry (max 3 attempts) for failed API calls; clear error state |
-| onDraftSave | handleDraftSave(session_id, text) | Debounced localStorage write (300ms) |
-| onResumeSession | handleResumeSession() | Check localStorage for active session_id, validate with backend, restore chat history if valid |
+  | Event | Handler | Description |
+  |-------|---------|-------------|
+  | onStartInterview | handleStartInterview(candidate_id) | POST /interview/start, validate response, route to Chat, store session_id |
+  | onSubmitAnswer | handleSubmitAnswer(session_id, answer) | POST /interview/{session_id}/respond, optimistic UI update, show typing indicator, handle 8-turn minimum enforcement (disable End Interview until criteria met) |
+  | onReceiveQuestion | handleReceiveQuestion(response) | Append question to chat history, update progress indicators, trigger persona change animation if persona switched |
+  | onEndInterview | handleEndInterview(session_id) | POST /interview/{session_id}/feedback, show loading overlay, route to Feedback Report |
+  | onAbortInterview | handleAbortInterview(session_id) | Show confirmation modal, POST /interview/{session_id}/abort, route to partial Feedback Report with disclaimer banner |
+  | onRetry | handleRetry() | Exponential backoff retry (max 3 attempts) for failed API calls; clear error state |
+  | onDraftSave | handleDraftSave(session_id, text) | Debounced localStorage write (300ms) |
+  | onResumeSession | handleResumeSession() | Check localStorage for active session_id, validate with backend, restore chat history if valid |
 
----
+  ---
 
 ### D. STATE MANAGEMENT REQUIREMENTS
 

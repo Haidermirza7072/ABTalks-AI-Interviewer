@@ -1,0 +1,39 @@
+# ─────────────────────────────────────────────────────────────
+# The Thread Puller — AI Agent layer (Member 3)
+# Local dev / demo via Docker Compose.
+#
+# Member 2 (FastAPI service) can add their own service block here
+# later and depend on `agent` for the shared module.
+# ─────────────────────────────────────────────────────────────
+
+services:
+  agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: threadpuller-agent:latest
+    container_name: threadpuller-agent
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      # Mount data files (curriculum.json, candidate_profiles.json) —
+      # Member 2 provides these; mount keeps them swappable without rebuild.
+      - ./data:/app/data:ro
+      # Persist fallback bank + generated artifacts back to host.
+      - ./agent/data:/app/agent/data
+      # Persist logs for eval suite / checkpoint reviews.
+      - interview_logs:/tmp/interview_logs
+    # Default command kept open for interactive use.
+    # NOTE: rebuild the image before running:
+    #   docker compose build
+    # The entrypoint is `python`, so pytest needs `-m`:
+    #   docker compose run --rm agent -m pytest tests/
+    #   docker compose run --rm agent scripts/poc/poc1_static_prompt.py
+    #   docker compose run --rm agent scripts/poc/poc2_offline_interview.py
+    #   docker compose run --rm agent scripts/poc/poc3_eval_metrics.py
+    stdin_open: true
+    tty: true
+
+volumes:
+  interview_logs:

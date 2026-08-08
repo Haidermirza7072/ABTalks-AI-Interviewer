@@ -1,0 +1,29 @@
+Task: Score ONLY the candidate's LAST answer on a 0-10 readiness scale.
+
+## Conversation so far
+{% for turn in history %}{{ turn.role | upper }}: {{ turn.content }}
+{% endfor %}
+## Candidate profile
+{% if profile %}candidate_id: {{ profile.candidate_id }}
+completed_days: {{ profile.completed_days | length }} days
+skipped_topics: {{ profile.skipped_topics | join(', ') or 'none' }}
+tools_used: {{ profile.tools_used | join(', ') }}
+{% endif %}
+
+## Instruction
+- Score ONLY the last answer (the most recent CANDIDATE turn).
+- 0-10 meaning: 0-4 weak, 5-6 shaky, 7-8 good, 9-10 exceptional.
+- Strengths: what the candidate demonstrated in that answer (1-3 items).
+- Gaps: what's missing or shaky in that answer (1-2 items).
+- suggested_focus: one specific angle the interviewer should probe next.
+- Be fair: reward what WAS said; do not penalize for skipped topics that
+  are unrelated to this answer. Never use gendered, age-based, or
+  culturally loaded assumptions.
+
+You must output valid JSON matching EXACTLY this schema:
+{
+  "score": <number 0-10>,
+  "strengths": ["..."],
+  "gaps": ["..."],
+  "suggested_focus": "..."
+}

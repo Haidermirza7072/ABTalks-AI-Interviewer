@@ -1,0 +1,28 @@
+Task: Synthesize a structured feedback report from the full interview transcript.
+
+## Full transcript
+{% for turn in transcript %}{{ turn.role | upper }}: {{ turn.content }}
+{% endfor %}
+## Evidence log (signals captured during the interview)
+{% for item in evidence_log %}• topic={{ item.topic }} signal={{ item.signal }} — {{ item.evidence }}
+{% else %}No evidence logged.
+{% endfor %}
+
+## Instruction
+- Assess the candidate's interview readiness on a 0-10 scale (10 = ready).
+- Every strength and growth-area claim MUST cite a specific moment: include
+  in "citation" a verbatim quote from the transcript.
+- If you cannot cite evidence for a claim, DO NOT include the claim.
+- Keep claims fair: a candidate with skipped days should not be penalized
+  more than warranted by what they actually said.
+- Avoid gendered, age-based, or culturally loaded assumptions.
+- Suggested resources should point to cohort days (e.g. day_12).
+
+You must output valid JSON matching EXACTLY this schema:
+{
+  "readiness_score": <number 0-10 or null>,
+  "strengths": [{"claim": "...", "citation": "verbatim quote", "day_reference": "day_XX"}],
+  "growth_areas": [{"claim": "...", "citation": "verbatim quote", "day_reference": "day_XX", "suggested_resource": "..."}],
+  "overall_summary": "...",
+  "is_partial": false
+}
