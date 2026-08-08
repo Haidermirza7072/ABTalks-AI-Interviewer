@@ -1,2 +1,23 @@
-.agents
-skills-lock.json
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+.coverage.*
+
+# Environments
+.env
+.venv/
+venv/
+ENV/
+
+# Project temporary runtime directories
+tmp/
+temp/
+
+# IDE files
+.idea/
+.vscode/
+*.swp
