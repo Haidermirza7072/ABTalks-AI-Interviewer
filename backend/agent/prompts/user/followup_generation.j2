@@ -1,0 +1,32 @@
+Task: Generate a follow-up question based on the candidate's LAST answer.
+
+## Last answer
+{{ last_answer }}
+
+## Conversation so far (recent turns only)
+{% for turn in history %}{{ turn.role | upper }}: {{ turn.content }}
+{% endfor %}
+## Recent question types (do not repeat the last 2)
+{{ recent_question_types | join(", ") }}
+
+## Evidence log (observations about the candidate, if any)
+{% for item in evidence_log %}topic={{ item.topic }} signal={{ item.signal }} evidence={{ item.evidence }}
+{% else %}No evidence logged yet.
+{% endfor %}
+
+## Instruction
+- Reference a SPECIFIC claim from the last answer in your question
+  (quote "references_claim" verbatim).
+- Choose a question_type appropriate to what the candidate said:
+  challenge a shaky claim, expand a vague detail, compare alternatives
+  the candidate could have chosen, or apply the concept to a new scenario.
+- Do NOT repeat the question types from the last 2 turns.
+- Do NOT invent technical facts not grounded in the candidate's answer
+  or the cohort curriculum.
+
+You must output valid JSON matching EXACTLY this schema:
+{
+  "question": "...",
+  "question_type": "challenge|expand|compare|apply|teach|meta",
+  "references_claim": "exact quoted substring from the last answer"
+}

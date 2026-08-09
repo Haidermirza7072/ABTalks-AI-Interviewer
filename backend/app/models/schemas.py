@@ -89,18 +89,48 @@ class InterviewSession(BaseModel):
         )
 
 
-# Entity 4: FeedbackReport
+# ──────────────────────────────────────────────────────────────
+# Feedback sub-models (aligned with agent schemas)
+# ──────────────────────────────────────────────────────────────
+
+class FeedbackStrengthResponse(BaseModel):
+    """A single strength claim in the feedback report."""
+    claim: str
+    citation: str = ""
+    day_reference: Optional[str] = None
+
+
+class FeedbackGrowthAreaResponse(BaseModel):
+    """A single growth-area claim in the feedback report."""
+    claim: str
+    citation: str = ""
+    day_reference: Optional[str] = None
+    suggested_resource: Optional[str] = None
+
+
+class AnswerScoreResponse(BaseModel):
+    """Per-turn answer scoring result."""
+    score: float = Field(ge=0.0, le=10.0)
+    strengths: List[str] = Field(default_factory=list)
+    gaps: List[str] = Field(default_factory=list)
+    suggested_focus: Optional[str] = None
+
+
+# Entity 4: FeedbackReport (kept for internal use / backward compat)
 class FeedbackReport(BaseModel):
-    readiness_score: int = Field(..., ge=1, le=10)
-    strengths: List[Dict[str, str]]  # [{"title": "...", "evidence": "..."}]
-    growth_areas: List[Dict[str, str]]  # [{"title": "...", "resource": "..."}]
-    communication_tips: List[str]
-    evidence_citations: List[str]
+    readiness_score: Optional[float] = Field(default=None, ge=0.0, le=10.0)
+    strengths: List[FeedbackStrengthResponse] = Field(default_factory=list)
+    growth_areas: List[FeedbackGrowthAreaResponse] = Field(default_factory=list)
+    overall_summary: str = ""
     is_partial: bool = False
     disclaimer: Optional[str] = None
 
 
-# Entity 5: API Request/Response Models
+# ──────────────────────────────────────────────────────────────
+# API Request/Response Models
+# ──────────────────────────────────────────────────────────────
+
+
 class StartInterviewRequest(BaseModel):
     candidate_id: str = Field(..., min_length=1, max_length=50)
 
@@ -108,10 +138,13 @@ class StartInterviewRequest(BaseModel):
 class StartInterviewResponse(BaseModel):
     session_id: str
     first_question: str
+    question_type: Optional[str] = None      # from QuestionOutput
+    target_day: Optional[str] = None         # from QuestionOutput
     turn_count: int
     can_conclude: bool
     covered_days: List[str]
     current_persona: str
+    fallback_used: bool = False              # from AgentOutput
 
 
 class RespondRequest(BaseModel):
@@ -120,20 +153,38 @@ class RespondRequest(BaseModel):
 
 class RespondResponse(BaseModel):
     next_question: str
+    question_type: Optional[str] = None      # from QuestionOutput
+    target_day: Optional[str] = None         # from QuestionOutput
     turn_count: int
     can_conclude: bool
     covered_days: List[str]
     current_persona: str
+    fallback_used: bool = False              # from AgentOutput
+    answer_score: Optional[AnswerScoreResponse] = None  # per-turn score
+
+
+class ScoreRequest(BaseModel):
+    """Request body for the score endpoint (optional, can be empty)."""
+    pass
+
+
+class ScoreResponse(BaseModel):
+    """Response for per-turn answer scoring."""
+    score: float
+    strengths: List[str]
+    gaps: List[str]
+    suggested_focus: Optional[str] = None
+    fallback_used: bool = False
 
 
 class FeedbackResponse(BaseModel):
-    readiness_score: int
-    strengths: List[Dict[str, str]]
-    growth_areas: List[Dict[str, str]]
-    communication_tips: List[str]
-    evidence_citations: List[str]
+    readiness_score: Optional[float] = None
+    strengths: List[FeedbackStrengthResponse] = Field(default_factory=list)
+    growth_areas: List[FeedbackGrowthAreaResponse] = Field(default_factory=list)
+    overall_summary: str = ""
     is_partial: bool
     disclaimer: Optional[str] = None
+    fallback_used: bool = False
 
 
 # Standardized Error Response Schema

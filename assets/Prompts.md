@@ -21,6 +21,17 @@ For each of these three prompts, ensure they are atomic (can be run independentl
 
 ### Prompt 4
 Create a design.md for this.
+### Member 2 - Shesh Kanade
+
+
+### Prompt 1
+Prompt.md read this file give me implementaion plan
+
+### Prompt 2
+Proceed with Implementation plan 
+
+### Prompt 3
+make Git .ignore push in new branch
 
 ## Member 3 - Vishal Mondal
 

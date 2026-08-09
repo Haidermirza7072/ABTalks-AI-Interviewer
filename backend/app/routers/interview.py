@@ -3,16 +3,20 @@ from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import JSONResponse
 
 from app.models.schemas import (
+    AnswerScoreResponse,
     ErrorResponse,
+    FeedbackGrowthAreaResponse,
     FeedbackResponse,
+    FeedbackStrengthResponse,
     InterviewSession,
     RespondRequest,
     RespondResponse,
+    ScoreResponse,
     StartInterviewRequest,
     StartInterviewResponse,
 )
 from app.services.data_loader import CANDIDATE_STORE
-from app.services.llm_client import generate_feedback_report, generate_next_question
+from app.services.agent_bridge import generate_question, generate_feedback, score_answer
 from app.services.session_manager import get_session, save_session
 
 router = APIRouter(prefix="/interview", tags=["Interview"])
@@ -27,6 +31,55 @@ def create_error_response(status_code: int, error_code: str, message: str, recov
             "recoverable": recoverable,
             "timestamp": datetime.now(timezone.utc).isoformat(),
         },
+    )
+
+
+def _extract_question_metadata(agent_output):
+    """Extract enriched metadata from an AgentOutput's QuestionOutput."""
+    output = agent_output.output
+    question_text = getattr(output, "question", str(output))
+    question_type = getattr(output, "question_type", None)
+    target_day = getattr(output, "target_day", None)
+
+    if question_type and hasattr(question_type, "value"):
+        question_type = question_type.value
+    if question_type:
+        question_type = str(question_type)
+
+    return question_text, question_type, target_day
+
+
+def _map_feedback_response(agent_output, is_partial: bool = False) -> FeedbackResponse:
+    """Map agent FeedbackReport output to backend FeedbackResponse."""
+    report = agent_output.output
+
+    # Map strengths
+    strengths = []
+    for s in getattr(report, "strengths", []):
+        strengths.append(FeedbackStrengthResponse(
+            claim=getattr(s, "claim", str(s)),
+            citation=getattr(s, "citation", ""),
+            day_reference=getattr(s, "day_reference", None),
+        ))
+
+    # Map growth areas
+    growth_areas = []
+    for g in getattr(report, "growth_areas", []):
+        growth_areas.append(FeedbackGrowthAreaResponse(
+            claim=getattr(g, "claim", str(g)),
+            citation=getattr(g, "citation", ""),
+            day_reference=getattr(g, "day_reference", None),
+            suggested_resource=getattr(g, "suggested_resource", None),
+        ))
+
+    return FeedbackResponse(
+        readiness_score=getattr(report, "readiness_score", None),
+        strengths=strengths,
+        growth_areas=growth_areas,
+        overall_summary=getattr(report, "overall_summary", ""),
+        is_partial=getattr(report, "is_partial", is_partial),
+        disclaimer=getattr(report, "disclaimer", None),
+        fallback_used=agent_output.fallback_used,
     )
 
 
@@ -51,8 +104,8 @@ async def start_interview(payload: StartInterviewRequest):
     candidate_profile = CANDIDATE_STORE[payload.candidate_id]
     session = InterviewSession(candidate_id=payload.candidate_id)
 
-    # Generate initial first question
-    first_q = await generate_next_question(
+    # Generate initial first question via the agent pipeline
+    agent_output = await generate_question(
         session=session,
         candidate_profile=candidate_profile,
         candidate_answer=None,
@@ -62,13 +115,18 @@ async def start_interview(payload: StartInterviewRequest):
 
     await save_session(session)
 
+    first_q, question_type, target_day = _extract_question_metadata(agent_output)
+
     return StartInterviewResponse(
         session_id=session.session_id,
         first_question=first_q,
+        question_type=question_type,
+        target_day=target_day or "",
         turn_count=session.turn_count,
         can_conclude=session.can_conclude,
         covered_days=list(session.covered_days),
         current_persona=session.current_persona,
+        fallback_used=agent_output.fallback_used,
     )
 
 
@@ -99,21 +157,78 @@ async def respond_interview(session_id: str, payload: RespondRequest):
     if session.turn_count >= 3:
         session.can_conclude = True
 
-    # Generate next question via LLM / Fallback
-    next_q = await generate_next_question(
+    # Generate next question via the agent pipeline
+    agent_output = await generate_question(
         session=session,
         candidate_profile=candidate_profile,
         candidate_answer=payload.answer,
     )
 
+    # Optionally score the submitted answer
+    answer_score_resp = None
+    try:
+        score_output = await score_answer(
+            session=session,
+            candidate_profile=candidate_profile,
+        )
+        score_data = score_output.output
+        answer_score_resp = AnswerScoreResponse(
+            score=getattr(score_data, "score", 5.0),
+            strengths=getattr(score_data, "strengths", []),
+            gaps=getattr(score_data, "gaps", []),
+            suggested_focus=getattr(score_data, "suggested_focus", None),
+        )
+    except Exception:
+        pass  # scoring is optional, don't block the interview
+
     await save_session(session)
+
+    next_q, question_type, target_day = _extract_question_metadata(agent_output)
 
     return RespondResponse(
         next_question=next_q,
+        question_type=question_type,
+        target_day=target_day or "",
         turn_count=session.turn_count,
         can_conclude=session.can_conclude,
         covered_days=list(session.covered_days),
         current_persona=session.current_persona,
+        fallback_used=agent_output.fallback_used,
+        answer_score=answer_score_resp,
+    )
+
+
+@router.post(
+    "/{session_id}/score",
+    response_model=ScoreResponse,
+    summary="Score the candidate's last answer",
+    responses={
+        404: {"model": ErrorResponse, "description": "Session not found"},
+    },
+)
+async def score_last_answer(session_id: str):
+    """Score the candidate's most recent answer without advancing the interview."""
+    session = get_session(session_id)
+    if not session:
+        return create_error_response(
+            status_code=status.HTTP_404_NOT_FOUND,
+            error_code="SESSION_NOT_FOUND",
+            message="The interview session has expired or does not exist.",
+        )
+
+    candidate_profile = CANDIDATE_STORE.get(session.candidate_id)
+    score_output = await score_answer(
+        session=session,
+        candidate_profile=candidate_profile,
+    )
+    score_data = score_output.output
+
+    return ScoreResponse(
+        score=getattr(score_data, "score", 5.0),
+        strengths=getattr(score_data, "strengths", []),
+        gaps=getattr(score_data, "gaps", []),
+        suggested_focus=getattr(score_data, "suggested_focus", None),
+        fallback_used=score_output.fallback_used,
     )
 
 
@@ -144,18 +259,11 @@ async def get_feedback(session_id: str):
         )
 
     session.status = "completed"
-    report = await generate_feedback_report(session, is_partial=False)
+    candidate_profile = CANDIDATE_STORE.get(session.candidate_id)
+    agent_output = await generate_feedback(session, candidate_profile, is_partial=False)
     await save_session(session)
 
-    return FeedbackResponse(
-        readiness_score=report.readiness_score,
-        strengths=report.strengths,
-        growth_areas=report.growth_areas,
-        communication_tips=report.communication_tips,
-        evidence_citations=report.evidence_citations,
-        is_partial=report.is_partial,
-        disclaimer=report.disclaimer,
-    )
+    return _map_feedback_response(agent_output, is_partial=False)
 
 
 @router.post(
@@ -177,15 +285,10 @@ async def abort_interview(session_id: str):
         )
 
     session.status = "aborted"
-    report = await generate_feedback_report(session, is_partial=True)
+    candidate_profile = CANDIDATE_STORE.get(session.candidate_id)
+    agent_output = await generate_feedback(session, candidate_profile, is_partial=True)
     await save_session(session)
 
-    return FeedbackResponse(
-        readiness_score=report.readiness_score,
-        strengths=report.strengths,
-        growth_areas=report.growth_areas,
-        communication_tips=report.communication_tips,
-        evidence_citations=report.evidence_citations,
-        is_partial=True,
-        disclaimer="Partial feedback generated upon candidate abort.",
-    )
+    response = _map_feedback_response(agent_output, is_partial=True)
+    response.disclaimer = response.disclaimer or "Partial feedback generated upon candidate abort."
+    return response
