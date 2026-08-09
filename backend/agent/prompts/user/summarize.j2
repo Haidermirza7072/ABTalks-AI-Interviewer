@@ -1,0 +1,13 @@
+Task: Condense the conversation history into a running summary.
+
+## Full history
+{% for turn in history %}{{ turn.role | upper }}: {{ turn.content }}
+{% endfor %}
+## Instruction
+- Summarize what the candidate demonstrated: topics covered, signals of
+  strength or gaps, notable claims or phrases worth remembering.
+- Keep it under 120 words. Extractive style preferred.
+- Do NOT invent topics that never appeared.
+
+You must output valid JSON matching EXACTLY this schema:
+{ "summary": "..." }

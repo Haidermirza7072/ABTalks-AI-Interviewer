@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     # LLM Settings
     OPENROUTER_API_KEY: Optional[str] = os.getenv("OPENROUTER_API_KEY", "")
     OPENROUTER_API_URL: str = "https://openrouter.ai/api/v1/chat/completions"
-    OPENROUTER_MODEL: str = "nvidia/llama-3.1-nemotron-70b-instruct"
+    OPENROUTER_MODEL: str = "meta-llama/llama-3.3-70b-instruct"
     LLM_TIMEOUT_SECONDS: float = 5.0
     
     # Session Persistence & TTL
